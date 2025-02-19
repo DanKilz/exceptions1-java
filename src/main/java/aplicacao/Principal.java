@@ -34,15 +34,11 @@ public class Principal {
             System.out.print("Data de saída (dd/mm/aaaa): ");
             saida = formatarData.parse(escaner.next());
             
-            Date agora = new Date();
-            if (entrada.before(agora) || saida.before(agora))
-                System.err.println("Erro na reserva: a data de saída deve ser posterior a data de entrada.");
-            else if (!saida.after(entrada))
-                System.err.println("Erro na reserva: a data de saída deve ser posterior a data de entrada.");
-            else {
-                reserva.atualizarDatas(entrada, saida);
+            String erro = reserva.atualizarDatas(entrada, saida);
+            if (erro != null)
+                System.err.println("Erro na reserva: " + erro);
+            else
                 System.out.println("Reserva: " + reserva);
-            }
         }
         
         escaner.close();

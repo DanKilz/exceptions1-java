@@ -56,9 +56,18 @@ public class Reserva {
     }
     
     // Modifica as datas de entrada e saída.
-    public void atualizarDatas(Date entrada, Date saida) {
+    public String atualizarDatas(Date entrada, Date saida) {        
+        Date agora = new Date();
+        if (entrada.before(agora) || saida.before(agora))
+            return "As datas de reserva devem ser futuras.";
+        if (!saida.after(entrada))
+            return "A data de saída deve ser posterior a data de entrada.";
+            
         this.entrada = entrada;
         this.saida = saida;
+        
+        // Se o método retornar nulo, é porque não houve erros.
+        return null;
     }
 
     @Override
