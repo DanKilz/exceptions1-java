@@ -3,6 +3,7 @@ package model.entidades;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import model.excecoes.DominioException;
 
 public class Reserva {
     
@@ -17,7 +18,11 @@ public class Reserva {
     
     // CONSTRUTORES
     
-    public Reserva(Integer quartoNumero, Date entrada, Date saida) {
+    public Reserva(Integer quartoNumero, Date entrada, Date saida) throws DominioException{
+        if (!saida.after(entrada)) {
+            throw new DominioException("A data de saída deve ser posterior a data de entrada.");
+        }
+        
         this.numeroQuarto = quartoNumero;
         this.entrada = entrada;
         this.saida = saida;
@@ -56,18 +61,19 @@ public class Reserva {
     }
     
     // Modifica as datas de entrada e saída.
-    public String atualizarDatas(Date entrada, Date saida) {        
+    public void atualizarDatas(Date entrada, Date saida) throws DominioException {        
         Date agora = new Date();
-        if (entrada.before(agora) || saida.before(agora))
-            return "As datas de reserva devem ser futuras.";
-        if (!saida.after(entrada))
-            return "A data de saída deve ser posterior a data de entrada.";
+        
+        if (entrada.before(agora) || saida.before(agora)){
+            throw new DominioException("As datas de reserva devem ser futuras.");
+        }
+        
+        if (!saida.after(entrada)) {
+            throw new DominioException("A data de saída deve ser posterior a data de entrada.");
+        }
             
         this.entrada = entrada;
         this.saida = saida;
-        
-        // Se o método retornar nulo, é porque não houve erros.
-        return null;
     }
 
     @Override
